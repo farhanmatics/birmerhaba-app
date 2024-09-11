@@ -15,6 +15,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     MerriweatherSans: require('../assets/fonts/MerriweatherSans-Regular.ttf'),
     Lato: require('../assets/fonts/Lato-Regular.ttf'),
+    MajorMonoDisplay: require('../assets/fonts/MajorMonoDisplay-Regular.ttf'),
   });
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="start" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
