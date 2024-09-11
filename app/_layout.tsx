@@ -13,7 +13,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    MerriweatherSans: require('../assets/fonts/MerriweatherSans-Regular.ttf'),
+    Merriweather: require('../assets/fonts/MerriweatherSans-Regular.ttf'),
     Lato: require('../assets/fonts/Lato-Regular.ttf'),
     MajorMonoDisplay: require('../assets/fonts/MajorMonoDisplay-Regular.ttf'),
   });

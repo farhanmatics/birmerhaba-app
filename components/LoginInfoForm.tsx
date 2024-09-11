@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
-
+import { Checkbox } from 'expo-checkbox'; // Make sure to install this package
 
 interface FormData {
   nickname: string;
@@ -11,11 +11,14 @@ interface FormData {
   country: string;
   city: string;
   gender: string;
+  acceptMembership: boolean;
+  acceptPersonalData: boolean;
 }
 
 interface LoginInfoFormProps {
   formData: FormData;
   updateFormData: (data: Partial<FormData>) => void;
+  onContinue: () => void; // Add this prop for the continue button
 }
 
 const countries = [
@@ -36,7 +39,7 @@ const genders = [
   { name: 'Other', code: 'other' },
 ];
 
-export default function LoginInfoForm({ formData, updateFormData }: LoginInfoFormProps) {
+export default function LoginInfoForm({ formData, updateFormData, onContinue }: LoginInfoFormProps) {
   const [isCountryModalVisible, setCountryModalVisible] = useState(false);
   const [isCityModalVisible, setCityModalVisible] = useState(false);
   const [isGenderModalVisible, setGenderModalVisible] = useState(false);
@@ -84,6 +87,10 @@ export default function LoginInfoForm({ formData, updateFormData }: LoginInfoFor
       </View>
     </Modal>
   );
+
+  const isFormValid = () => {
+    return formData.acceptMembership && formData.acceptPersonalData;
+  };
 
   return (
     <View style={styles.container}>
@@ -133,6 +140,32 @@ export default function LoginInfoForm({ formData, updateFormData }: LoginInfoFor
         <Text style={{color: '#fff', flex: 1}}>{formData.gender ? genders.find(g => g.code === formData.gender)?.name : 'Select Gender...'}</Text>
         <Entypo name="dots-two-horizontal" size={24} color="#fff" />
       </TouchableOpacity>
+
+      <View style={styles.checkboxContainer}>
+        <Checkbox
+          value={formData.acceptMembership}
+          onValueChange={(value) => updateFormData({ acceptMembership: value })}
+          color={formData.acceptMembership ? '#fc466b' : undefined}
+        />
+        <Text style={styles.checkboxLabel}>I accept the membership and privacy policy</Text>
+      </View>
+
+      <View style={styles.checkboxContainer}>
+        <Checkbox
+          value={formData.acceptPersonalData}
+          onValueChange={(value) => updateFormData({ acceptPersonalData: value })}
+          color={formData.acceptPersonalData ? '#fc466b' : undefined}
+        />
+        <Text style={styles.checkboxLabel}>I accept the use of my personal data</Text>
+      </View>
+
+      {/* <TouchableOpacity
+        style={[styles.continueButton, !isFormValid() && styles.disabledButton]}
+        onPress={onContinue}
+        disabled={!isFormValid()}
+      >
+        <Text style={styles.continueButtonText}>Continue</Text>
+      </TouchableOpacity> */}
 
       {renderModal(isCountryModalVisible, closeModal(setCountryModalVisible), 'Select Country', countries, (item) => selectItem('country', item.code))}
       {renderModal(isCityModalVisible, closeModal(setCityModalVisible), 'Select City', cities, (item) => selectItem('city', item.code))}
@@ -208,5 +241,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     alignItems: 'center',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop:4,
+  },
+  checkboxLabel: {
+    marginLeft: 8,
+    color: '#fff',
+    fontFamily: 'Merriweather',
+    fontSize: 14,
+  },
+  continueButton: {
+    backgroundColor: '#fc466b',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  disabledButton: {
+    backgroundColor: '#888',
+  },
+  continueButtonText: {
+    color: '#fff',
+    fontFamily: 'Merriweather',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

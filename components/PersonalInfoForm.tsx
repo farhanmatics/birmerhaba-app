@@ -91,6 +91,10 @@ export default function PersonalInfoForm({ formData, updateFormData, onBack }: P
         <Entypo name="dots-two-horizontal" size={24} color="#fff" />
       </TouchableOpacity>
 
+      <Text style={styles.infoText}>
+        NOTE:*Birmerhaba uses the Official Approved Membership Model. Please enter your real information in the field below. You can change the information in this field until your membership is approved. We do not share your name, surname, birth date and month with anyone.
+      </Text>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -193,5 +197,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  infoText: {
+    color: '#fff',
+    fontFamily: 'Merriweather',
+    fontSize: 11,
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });

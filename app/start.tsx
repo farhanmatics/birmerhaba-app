@@ -39,7 +39,12 @@ export default function Start() {
       </Animated.View>
       <View style={styles.content}>
         <Text style={styles.label2}>The Best Way to Meet New People is to say HELLO</Text>
-        <Text style={styles.label}>Find Your Perfect Match</Text>
+        <View style={styles.glowingTextContainer}>
+          <Text style={[styles.label, styles.glowingShadow]}>Find Your Perfect Match</Text>
+          <Text style={[styles.label, styles.glowingShadow]}>Find Your Perfect Match</Text>
+          <Text style={[styles.label, styles.glowingShadow]}>Find Your Perfect Match</Text>
+          <Text style={styles.label}>Find Your Perfect Match</Text>
+        </View>
         <View style={styles.buttonContainer}>
           <CustomButton
             title="Become a Member"
@@ -81,11 +86,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  glowingTextContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   label: {
     color: 'white',
-    fontSize: 22,
-    marginBottom: 20,
+    fontSize: 20,
     fontFamily: 'Lato',
+    textAlign: 'center',
+  },
+  glowingShadow: {
+    position: 'absolute',
+    textShadowColor: 'rgba(255, 255, 255, 0.75)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 1,
   },
   label2: {
     color: 'white',

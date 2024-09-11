@@ -1,34 +1,52 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useLocalSearchParams, Link } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { TextStyle } from 'react-native';
+
+const GradientText = ({ style, children, ...props }: { style?: TextStyle; children: React.ReactNode }) => (
+  <MaskedView
+    maskElement={<Text style={[style, { backgroundColor: 'transparent' }]} {...props}>{children}</Text>}
+  >
+    <LinearGradient
+      colors={['#0aff00', '#00ff80', '#00ffff']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
+      <Text style={[style, { opacity: 0 }]} {...props}>{children}</Text>
+    </LinearGradient>
+  </MaskedView>
+);
 
 export default function Confirmation() {
   const params = useLocalSearchParams();
 
   return (
     <LinearGradient
-      colors={['#4c669f', '#3b5998', '#192f6a']}
+      colors={['#3f5efb', '#3b5998', '#fc466b']}
       style={styles.container}
     >
       <View style={styles.card}>
-        <ScrollView>
-          <Text style={styles.title}>Registration Confirmation</Text>
-          <Text style={styles.subtitle}>Login Information:</Text>
-          <Text>Nickname: {params.nickname}</Text>
-          <Text>Email: {params.email}</Text>
-          <Text>Country: {params.country}</Text>
-          <Text>City: {params.city}</Text>
-          <Text>Gender: {params.gender}</Text>
-          
-          <Text style={styles.subtitle}>Personal Information:</Text>
-          <Text>First Name: {params.firstName}</Text>
-          <Text>Last Name: {params.lastName}</Text>
-          <Text>Date of Birth: {params.dateOfBirth}</Text>
-          <Text>Marital Status: {params.maritalStatus}</Text>
-          <Text>Nationality: {params.nationality}</Text>
-          <Text>Education Level: {params.educationLevel}</Text>
-        </ScrollView>
+        <GradientText style={styles.congratsText}>Congratulations!</GradientText>
+        <Text style={styles.title2}>Your Membership registration has been created!</Text>
+        <Text style={styles.text}>Please check your email to complete your BIRMERHABA registration</Text>
+        <Text style={[styles.text, {marginTop: 4}]}>In order to sign in into the site, activate your membership by clicking on the 'Membership Confirmation' link sent to your e-mail address</Text>
+        
+        
+        <Text style={styles.subtitle}>Personal Information:</Text>
+        <Text style={styles.text}>First Name: {params.firstName}</Text>
+        <Text style={styles.text}>Last Name: {params.lastName}</Text>
+        <Text style={styles.text}>Date of Birth: {params.dateOfBirth}</Text>
+        <Text style={styles.text}>Marital Status: {params.maritalStatus}</Text>
+        <Text style={styles.text}>Nationality: {params.nationality}</Text>
+        <Text style={styles.text}>Education Level: {params.educationLevel}</Text>
+        
+        <Link href="/" asChild>
+          <TouchableOpacity style={styles.homeButton}>
+            <Text style={styles.homeButtonText}>Go Home</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </LinearGradient>
   );
@@ -37,30 +55,61 @@ export default function Confirmation() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
   },
   card: {
-    flex: 1,
-    margin: 20,
+    alignSelf: 'center',
+    margin: 10,
     padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
+    backgroundColor: 'black',
+    borderRadius: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    justifyContent: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: '#0aff00',
+  },
+  title2: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#0aff00',
   },
   subtitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 5,
+    color: 'white',
+  },
+  text: {
+    color: 'white',
+    marginBottom: 5,
+  },
+  homeButton: {
+    backgroundColor: '#3f5efb',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  homeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  congratsText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });

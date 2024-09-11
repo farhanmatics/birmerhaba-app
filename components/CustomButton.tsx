@@ -22,22 +22,21 @@ const CustomButton: React.FC<CustomButtonProps> = ({ title, onPress, icon }) => 
 
 const styles = StyleSheet.create({
   shadowContainer: {
-    borderRadius: 25,
-    shadowColor: "#000",
+    borderRadius: 10,
+    shadowColor: "#e1e1e1",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 1,
     },
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.10,
     shadowRadius: 4.65,
-    elevation: 8,
   },
   button: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    padding: 20,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    marginHorizontal: 10,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    marginHorizontal: 2,
     marginVertical: 10,
   },
   contentContainer: {
