@@ -49,13 +49,13 @@ export default function Confirmation() {
         <Text style={[styles.text, {marginTop: 4}]}>In order to sign in into the site, activate your membership by clicking on the 'Membership Confirmation' link sent to your e-mail address</Text>
         
         
-        <Text style={styles.subtitle}>Personal Information:</Text>
+        {/* <Text style={styles.subtitle}>Personal Information:</Text>
         <Text style={styles.text}>First Name: {params.firstName}</Text>
         <Text style={styles.text}>Last Name: {params.lastName}</Text>
         <Text style={styles.text}>Date of Birth: {params.dateOfBirth}</Text>
         <Text style={styles.text}>Marital Status: {params.maritalStatus}</Text>
         <Text style={styles.text}>Nationality: {params.nationality}</Text>
-        <Text style={styles.text}>Education Level: {params.educationLevel}</Text>
+        <Text style={styles.text}>Education Level: {params.educationLevel}</Text> */}
         
         <Link href="/" asChild>
           <TouchableOpacity style={styles.homeButton}>
