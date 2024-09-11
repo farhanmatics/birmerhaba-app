@@ -37,10 +37,11 @@ export default function Confirmation() {
       <View style={styles.card}>
         <LottieView
           ref={animation}
-          source={require('../assets/images/congrats.json')}
+          source={require('../assets/images/lovesuccess.json')}
           style={styles.lottieAnimation}
           autoPlay={true}
           loop={true}
+          speed={0.4}
         />
         <GradientText style={styles.congratsText}>Congratulations!</GradientText>
         <Text style={styles.title2}>Your Membership registration has been created!</Text>
