@@ -33,6 +33,8 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="start" options={{ headerShown: false }} />
+        <Stack.Screen name="Register" options={{ headerShown: false }} />
+        <Stack.Screen name="Confirmation" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

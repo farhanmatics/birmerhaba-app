@@ -16,7 +16,7 @@ export default function Start() {
     Animated.loop(
       Animated.timing(animatedValue, {
         toValue: 1,
-        duration: 10000,
+        duration: 20000,
         useNativeDriver: false,
       })
     ).start();
@@ -38,12 +38,12 @@ export default function Start() {
         />
       </Animated.View>
       <View style={styles.content}>
-        
+        <Text style={styles.label2}>The Best Way to Meet New People is to say HELLO</Text>
         <Text style={styles.label}>Find Your Perfect Match</Text>
         <View style={styles.buttonContainer}>
           <CustomButton
             title="Become a Member"
-            onPress={() => console.log('Become a Member')}
+            onPress={() => router.push('/Register')}
             icon={<Heart size={24} color="white" />}
           />
           <Text style={styles.smallLabel}>Already a Member?</Text>
@@ -84,6 +84,13 @@ const styles = StyleSheet.create({
   label: {
     color: 'white',
     fontSize: 22,
+    marginBottom: 20,
+    fontFamily: 'Lato',
+  },
+  label2: {
+    color: 'white',
+    fontSize: 18,
+    padding: 30,
     marginBottom: 20,
     fontFamily: 'MajorMonoDisplay',
   },
