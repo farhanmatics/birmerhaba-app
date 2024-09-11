@@ -5,6 +5,7 @@ import CustomButton from '@/components/CustomButton';
 import { useRouter } from 'expo-router';
 import { Heart, User } from 'lucide-react-native';
 import { Link } from 'expo-router';
+import LottieView from 'lottie-react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -38,6 +39,12 @@ export default function Start() {
         />
       </Animated.View>
       <View style={styles.content}>
+        <LottieView
+          source={require('../assets/images/lovefly.json')}
+          style={styles.lottieAnimation}
+          autoPlay
+          loop
+        />
         <Text style={styles.label2}>The Best Way to Meet New People is to say HELLO</Text>
         <View style={styles.glowingTextContainer}>
           <Text style={[styles.label, styles.glowingShadow]}>Find Your Perfect Match</Text>
@@ -85,6 +92,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 50, // Adjust this value to control where the animation stops
   },
   glowingTextContainer: {
     position: 'relative',
@@ -107,8 +115,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     padding: 30,
-    marginBottom: 20,
+    marginTop: 40, // Adjust this value to control the space between the animation and text
     fontFamily: 'MajorMonoDisplay',
+    textAlign: 'center',
+  },
+  lottieAnimation: {
+    width: '100%',
+    height: 200, // Adjust this value to control the height of the animation
+    position: 'absolute',
+    top: 0,
   },
   buttonContainer: {
     marginBottom: 20,
@@ -126,5 +141,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 0,
     fontFamily: 'Merriweather',
+  },
+  textOverlayContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

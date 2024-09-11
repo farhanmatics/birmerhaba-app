@@ -4,6 +4,8 @@ import { useLocalSearchParams, Link } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { TextStyle } from 'react-native';
+import LottieView from 'lottie-react-native';
+import { useRef, useEffect } from 'react';
 
 const GradientText = ({ style, children, ...props }: { style?: TextStyle; children: React.ReactNode }) => (
   <MaskedView
@@ -21,6 +23,11 @@ const GradientText = ({ style, children, ...props }: { style?: TextStyle; childr
 
 export default function Confirmation() {
   const params = useLocalSearchParams();
+  const animation = useRef<LottieView>(null);
+
+  useEffect(() => {
+    animation.current?.play();
+  }, []);
 
   return (
     <LinearGradient
@@ -28,6 +35,13 @@ export default function Confirmation() {
       style={styles.container}
     >
       <View style={styles.card}>
+        <LottieView
+          ref={animation}
+          source={require('../assets/images/congrats.json')}
+          style={styles.lottieAnimation}
+          autoPlay={true}
+          loop={true}
+        />
         <GradientText style={styles.congratsText}>Congratulations!</GradientText>
         <Text style={styles.title2}>Your Membership registration has been created!</Text>
         <Text style={styles.text}>Please check your email to complete your BIRMERHABA registration</Text>
@@ -62,7 +76,8 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 20,
     backgroundColor: 'black',
-    borderRadius: 4,
+    borderTopRightRadius: 30,
+    borderBottomLeftRadius: 30,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -111,5 +126,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  lottieAnimation: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
   },
 });
