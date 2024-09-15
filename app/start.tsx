@@ -61,7 +61,7 @@ export default function Start() {
           <Text style={styles.smallLabel}>Already a Member?</Text>
           <CustomButton
             title="Sign in here"
-            onPress={() => console.log('Log In pressed')}
+            onPress={() => router.push('/Login')} // Update this line to route to the Login screen
             icon={<User size={24} color="white" />}
           />
         </View>

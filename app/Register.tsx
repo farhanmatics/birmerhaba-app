@@ -6,6 +6,10 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import CustomButton from '@/components/CustomButton';
 import LoginInfoForm from '@/components/LoginInfoForm';
 import PersonalInfoForm from '@/components/PersonalInfoForm';
+import { db, auth } from './firebaseConfig'; // Adjust the path as necessary
+import { getFirestore, collection, addDoc, doc, setDoc } from 'firebase/firestore'; // Import Firestore
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; // Import Auth
+import LottieView from 'lottie-react-native'; // Add this line
 
 export default function Register() {
   const router = useRouter();
@@ -24,17 +28,56 @@ export default function Register() {
     maritalStatus: '',
     nationality: '',
     educationLevel: '',
+    acceptMembership: false, // Add this line
+    acceptPersonalData: false, // Add this line
   });
+  const [loading, setLoading] = useState(false); // Add this line
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (step === 1) {
       setStep(2);
     } else {
-      // Here you would typically validate the form and submit data
-      router.push({
-        pathname: '/Confirmation',
-        params: formData,
-      });
+      setLoading(true); // Add this line to set loading state
+      try {
+        const auth = getAuth();
+        const db = getFirestore();
+        
+        // Create user with email and password
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const user = userCredential.user;
+        
+        // Store user details in Firestore using the user's UID
+        await setDoc(doc(db, 'user-details', user.uid), {
+          city: formData.city,
+          country: formData.country,
+          dateofbirth: formData.dateOfBirth,
+          education: formData.educationLevel,
+          firstname: formData.firstName,
+          gender: formData.gender,
+          lastname: formData.lastName,
+          marital: formData.maritalStatus,
+          nationality: formData.nationality,
+          nickname: formData.nickname,
+        });
+
+        // Wait for 3 seconds before navigating
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        router.push({
+          pathname: '/Confirmation',
+          params: {
+            ...formData,
+            acceptMembership: formData.acceptMembership.toString(), // Convert to string
+            acceptPersonalData: formData.acceptPersonalData.toString(), // Convert to string
+          },
+        });
+      } catch (error) {
+        console.error("Error creating user or storing data: ", error);
+        // Handle error (e.g., show a message to the user)
+        setLoading(false);
+      } finally {
+        //setLoading(false); // Add this line to reset loading state
+      }
     }
   };
 
@@ -71,7 +114,11 @@ export default function Register() {
           </MaskedView>
           
           {step === 1 ? (
-            <LoginInfoForm formData={formData} updateFormData={updateFormData} />
+            <LoginInfoForm 
+              formData={formData} 
+              updateFormData={updateFormData} 
+              onContinue={handleContinue} // Add this line
+            />
           ) : (
             <PersonalInfoForm 
               formData={formData} 
@@ -81,10 +128,19 @@ export default function Register() {
           )}
         </ScrollView>
         <View style={styles.buttonContainer}>
-          <CustomButton
-            title={step === 1 ? "Continue" : "Submit"}
-            onPress={handleContinue}
-          />
+          {loading ? ( // Add this condition
+            <LottieView 
+              source={require('../assets/images/lovesuccess.json')} 
+              autoPlay 
+              loop={false} 
+              style={styles.lottie} // Add a style for the Lottie animation
+            />
+          ) : (
+            <CustomButton
+              title={step === 1 ? "Continue" : "Submit"} // Update title
+              onPress={handleContinue} // Use handleContinue directly
+            />
+          )}
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -115,5 +171,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     padding: 20,
     backgroundColor: '#1f1e1e',
+  },
+  lottie: {
+    width: 60, // Adjust width as needed
+    height: 60, // Adjust height as needed
   },
 });

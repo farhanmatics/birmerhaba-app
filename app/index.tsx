@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, StyleSheet, View, Text } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { ArrowRight } from 'lucide-react-native';
 import CustomButton from '@/components/CustomButton';
 import { useRouter } from 'expo-router';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleGetStarted = () => {
-    router.push('/start');
+    if (isLoggedIn) {
+      router.push('/LoggedHome');
+    } else {
+      router.push('/start');
+    }
   };
 
   return (

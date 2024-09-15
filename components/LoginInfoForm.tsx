@@ -22,14 +22,16 @@ interface LoginInfoFormProps {
 }
 
 const countries = [
+  { name: 'Türkiye', code: 'Türkiye' },
   { name: 'USA', code: 'usa' },
   { name: 'Canada', code: 'canada' },
   // Add more countries here
 ];
 
 const cities = [
-  { name: 'New York', code: 'new_york' },
-  { name: 'Los Angeles', code: 'los_angeles' },
+  { name: 'Istanbul-Euro', code: 'Istanbul-Euro' },
+  { name: 'Istanbul-And', code: 'Istanbul-And' },
+  { name: 'Ankara', code: 'Ankara' },
   // Add more cities here
 ];
 
@@ -97,14 +99,14 @@ export default function LoginInfoForm({ formData, updateFormData, onContinue }: 
       <Text style={styles.sectionTitle}>1. User Information</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nickname"
+        placeholder="nickname"
         placeholderTextColor={'#e6c7e1'}
         value={formData.nickname}
         onChangeText={(text) => updateFormData({ nickname: text })}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="password"
         placeholderTextColor={'#e6c7e1'}
         secureTextEntry
         value={formData.password}
@@ -112,7 +114,7 @@ export default function LoginInfoForm({ formData, updateFormData, onContinue }: 
       />
       <TextInput
         style={styles.input}
-        placeholder="Retype Password"
+        placeholder="retype rassword"
         placeholderTextColor={'#e6c7e1'}
         secureTextEntry
         value={formData.retypePassword}
@@ -120,7 +122,7 @@ export default function LoginInfoForm({ formData, updateFormData, onContinue }: 
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="email"
         placeholderTextColor={'#e6c7e1'}
         keyboardType="email-address"
         value={formData.email}

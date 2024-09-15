@@ -5,6 +5,7 @@ interface CustomButtonProps {
   title: string;
   onPress: () => void;
   icon?: ReactNode;
+  disabled?: boolean; // Add this line
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({ title, onPress, icon }) => {

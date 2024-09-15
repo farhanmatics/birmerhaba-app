@@ -9,6 +9,7 @@ interface FormData {
   maritalStatus: string;
   nationality: string;
   educationLevel: string;
+  error?: string; // Add this line to include the error property
 }
   
 interface PersonalInfoFormProps {
@@ -94,6 +95,12 @@ export default function PersonalInfoForm({ formData, updateFormData, onBack }: P
       <Text style={styles.infoText}>
         NOTE:*Birmerhaba uses the Official Approved Membership Model. Please enter your real information in the field below. You can change the information in this field until your membership is approved. We do not share your name, surname, birth date and month with anyone.
       </Text>
+
+      {formData.error && (
+        <Text style={styles.errorText}>
+          {formData.error}
+        </Text>
+      )}
 
       <Modal
         animationType="slide"
@@ -204,6 +211,12 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: 10,
     marginBottom: 20,
+    textAlign: 'center',
+  },
+  errorText: {
+    color: '#fc466b', // or any color you prefer for error messages
+    fontSize: 14,
+    marginTop: 10,
     textAlign: 'center',
   },
 });

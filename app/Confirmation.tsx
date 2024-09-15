@@ -77,8 +77,7 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 20,
     backgroundColor: 'black',
-    borderTopRightRadius: 30,
-    borderBottomLeftRadius: 30,
+    borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#0aff00',
+    color: '#fff',
   },
   subtitle: {
     fontSize: 18,
@@ -111,11 +110,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   homeButton: {
-    backgroundColor: '#3f5efb',
+    backgroundColor: '#fc466b',
     padding: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
     marginTop: 20,
     alignSelf: 'center',
+    borderColor: '#fff',
+    borderWidth: 1,
   },
   homeButtonText: {
     color: 'white',
@@ -129,8 +131,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   lottieAnimation: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     alignSelf: 'center',
   },
 });
