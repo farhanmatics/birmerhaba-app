@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { auth } from './firebaseConfig';
 import { getFirestore, doc, getDoc, DocumentData } from 'firebase/firestore';
+import { LinearGradient } from 'expo-linear-gradient';
+import { signOut } from 'firebase/auth';
+import { router } from 'expo-router';
+import CustomButton from '@/components/CustomButton'; // Import CustomButton
+import { ArrowRight } from 'lucide-react-native';
+
 
 const BlankScreen = () => {
   const [userDetails, setUserDetails] = useState<DocumentData | null>(null);
+  
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -23,51 +30,79 @@ const BlankScreen = () => {
   }, []);
 
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.replace('/start');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image
         source={require('../assets/images/splash.png')}
         style={styles.splashImage}
       />
-      <View style={styles.card}>
-        <Text style={styles.welcomeText}>Welcome</Text>
-      </View>
-      <View style={styles.card}>
+      <LinearGradient
+        colors={['#3f5efb', '#3b5998', '#192f6a']}
+        style={styles.card}
+      >
+        <Image
+          source={require('../assets/images/userpic.jpg')}
+          style={styles.userPic}
+        />
         {userDetails && (
-            <>
-              <Text>{userDetails.firstname} {userDetails.lastname}, {userDetails.gender}</Text>
-              <Text>Nickname: {userDetails.nickname}</Text>
-              <Text>Date of Birth: {userDetails.dateofbirth}</Text>
-              <Text>Marital Status: {userDetails.marital}</Text>
-              <Text>Education: {userDetails.education}</Text>
-              <Text>Nationality: {userDetails.nationality}</Text>
-              <Text>City: {userDetails.city}</Text>
-              <Text>Country: {userDetails.country}</Text>
-            </>
-          )}
-      </View>
+          <>
+            <Text style={styles.userName}>{userDetails.firstname} {userDetails.lastname}</Text>
+            <Text style={styles.userInfo}>{userDetails.gender} • {userDetails.city}, {userDetails.country}</Text>
+            <View style={styles.detailsContainer}>
+              <DetailItem label="Nickname" value={userDetails.nickname} />
+              <DetailItem label="Date of Birth" value={userDetails.dateofbirth} />
+              <DetailItem label="Marital Status" value={userDetails.marital} />
+              <DetailItem label="Education" value={userDetails.education} />
+              <DetailItem label="Nationality" value={userDetails.nationality} />
+            </View>
+          </>
+        )}
+      </LinearGradient>
+      <CustomButton 
+        title="Logout"
+        onPress={handleLogout}
+        icon={<ArrowRight color="white" size={24} />}
+      />
     </View>
   );
 };
+
+const DetailItem = ({ label, value }: { label: string; value: string }) => (
+  <View style={styles.detailItem}>
+    <Text style={styles.detailLabel}>{label}:</Text>
+    <Text style={styles.detailValue}>{value}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center', // Center vertically
     alignItems: 'center', // Center horizontally
-    backgroundColor: '#ffffff', // Set to white or any color you prefer
+    backgroundColor: '#000', // Set to white or any color you prefer
   },
   card: {
-    width: '80%', // Adjust the width as needed
+    width: '90%',
     padding: 20,
-    borderRadius: 10,
-    backgroundColor: 'lightgray', // Card background color
+    borderRadius: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5, // Add elevation for Android shadow
-    alignItems: 'center', // Center text inside the card
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 10,
+    alignItems: 'center',
+    opacity: 0.6,
+    borderTopWidth: 6,
+    borderTopColor: '#fff',
     marginBottom: 20,
   },
   welcomeText: {
@@ -75,9 +110,45 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   splashImage: {
-    width: 200, // Adjust as needed
-    height: 200, // Adjust as needed
+    width: 140, // Adjust as needed
+    height: 140, // Adjust as needed
+    marginBottom: 10,
+  },
+  userPic: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    borderColor: '#fff',
+    marginBottom: 15,
+  },
+  userName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 5,
+  },
+  userInfo: {
+    fontSize: 16,
+    color: '#ddd',
     marginBottom: 20,
+  },
+  detailsContainer: {
+    width: '100%',
+  },
+  detailItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  detailLabel: {
+    fontSize: 14,
+    color: '#bbb',
+  },
+  detailValue: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: '500',
   },
 });
 
