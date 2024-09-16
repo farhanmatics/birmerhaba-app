@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal } from 'react-native';
-import { Ionicons, Entypo } from '@expo/vector-icons'; // Make sure to install @expo/vector-icons if not already installed
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, Platform } from 'react-native';
+import { Ionicons, Entypo } from '@expo/vector-icons'; 
+import DateTimePicker from '@react-native-community/datetimepicker'; 
 
 interface FormData {
   firstName: string;
@@ -9,18 +10,20 @@ interface FormData {
   maritalStatus: string;
   nationality: string;
   educationLevel: string;
-  error?: string; // Add this line to include the error property
+  error?: string;
 }
   
 interface PersonalInfoFormProps {
   formData: FormData;
   updateFormData: (data: Partial<FormData>) => void;
-  onBack: () => void; // Add this new prop
+  onBack: () => void;
 }
 
 export default function PersonalInfoForm({ formData, updateFormData, onBack }: PersonalInfoFormProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentField, setCurrentField] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [date, setDate] = useState(new Date(formData.dateOfBirth || Date.now()));
 
   const openModal = (field: string) => {
     setCurrentField(field);
@@ -35,7 +38,7 @@ export default function PersonalInfoForm({ formData, updateFormData, onBack }: P
   const renderOptions = () => {
     const options: Record<string, string[]> = {
       maritalStatus: ['Single', 'Married', 'Divorced', 'Widowed'],
-      nationality: ['American', 'Canadian', /* Add more nationalities */],
+      nationality: ['Türkiye', 'American', 'Canadian'],
       educationLevel: ['High School', "Bachelor's Degree", "Master's Degree", 'PhD'],
     };
 
@@ -46,6 +49,13 @@ export default function PersonalInfoForm({ formData, updateFormData, onBack }: P
         <Text>{option}</Text>
       </TouchableOpacity>
     ));
+  };
+
+  const onChangeDate = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(Platform.OS === 'ios');
+    setDate(currentDate);
+    updateFormData({ dateOfBirth: currentDate.toISOString().split('T')[0] });
   };
 
   return (
@@ -70,13 +80,40 @@ export default function PersonalInfoForm({ formData, updateFormData, onBack }: P
         value={formData.lastName}
         onChangeText={(text) => updateFormData({ lastName: text })}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Date of Birth"
-        placeholderTextColor="#e6c7e1"
-        value={formData.dateOfBirth}
-        onChangeText={(text) => updateFormData({ dateOfBirth: text })}
-      />
+      <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.pickerButton}>
+        <Text style={{color: '#fff', flex: 1}}>{formData.dateOfBirth ? new Date(formData.dateOfBirth).toLocaleDateString() : 'Select Date of Birth'}</Text>
+        <Entypo name="calendar" size={24} color="#fff" />
+      </TouchableOpacity>
+
+      {showDatePicker && (
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={showDatePicker}
+          onRequestClose={() => setShowDatePicker(false)}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="spinner"
+                onChange={onChangeDate}
+                style={styles.datePicker}
+              />
+              {Platform.OS === "ios" && (
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowDatePicker(false)}
+                >
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </Modal>
+      )}
+
       <TouchableOpacity onPress={() => openModal('maritalStatus')} style={styles.pickerButton}>
         <Text style={{color: '#fff', flex: 1}}>{formData.maritalStatus || 'Select Marital Status'}</Text>
         <Entypo name="dots-two-horizontal" size={24} color="#fff" />
@@ -189,8 +226,8 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 15,
     padding: 10,
-    backgroundColor: '#ddd',
-    borderRadius: 10,
+    backgroundColor: '#2196F3',
+    borderRadius: 20,
   },
   pickerButton: {
     height: 40,
@@ -218,5 +255,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 10,
     textAlign: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  datePicker: {
+    width: 320,
+    height: 260,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  // closeButton: {
+  //   backgroundColor: "#2196F3",
+  //   borderRadius: 20,
+  //   padding: 10,
+  //   elevation: 2,
+  //   marginTop: 15,
+  // },
+  closeButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
   },
 });

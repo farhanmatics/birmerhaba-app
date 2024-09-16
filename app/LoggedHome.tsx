@@ -8,10 +8,9 @@ import { router } from 'expo-router';
 import CustomButton from '@/components/CustomButton'; // Import CustomButton
 import { ArrowRight } from 'lucide-react-native';
 
-
-const BlankScreen = () => {
+const LoggedHome = () => {
   const [userDetails, setUserDetails] = useState<DocumentData | null>(null);
-  
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -23,12 +22,12 @@ const BlankScreen = () => {
         if (userDocSnap.exists()) {
           setUserDetails(userDocSnap.data());
         }
+        setLoading(false);
       }
     };
 
     fetchUserDetails();
   }, []);
-
 
   const handleLogout = async () => {
     try {
@@ -39,22 +38,26 @@ const BlankScreen = () => {
     }
   };
 
+  if (loading) {
+    return <View style={styles.container}><Text>Loading...</Text></View>;
+  }
+
   return (
     <View style={styles.container}>
       <Image
         source={require('../assets/images/splash.png')}
         style={styles.splashImage}
       />
-      <LinearGradient
-        colors={['#3f5efb', '#3b5998', '#192f6a']}
-        style={styles.card}
-      >
-        <Image
-          source={require('../assets/images/userpic.jpg')}
-          style={styles.userPic}
-        />
-        {userDetails && (
-          <>
+      {userDetails && (
+        <>
+          <LinearGradient
+            colors={['#3f5efb', '#3b5998', '#192f6a']}
+            style={styles.card}
+          >
+            <Image
+              source={require('../assets/images/userpic.jpg')}
+              style={styles.userPic}
+            />
             <Text style={styles.userName}>{userDetails.firstname} {userDetails.lastname}</Text>
             <Text style={styles.userInfo}>{userDetails.gender} • {userDetails.city}, {userDetails.country}</Text>
             <View style={styles.detailsContainer}>
@@ -64,14 +67,14 @@ const BlankScreen = () => {
               <DetailItem label="Education" value={userDetails.education} />
               <DetailItem label="Nationality" value={userDetails.nationality} />
             </View>
-          </>
-        )}
-      </LinearGradient>
-      <CustomButton 
-        title="Logout"
-        onPress={handleLogout}
-        icon={<ArrowRight color="white" size={24} />}
-      />
+          </LinearGradient>
+          <CustomButton 
+            title="Logout"
+            onPress={handleLogout}
+            icon={<ArrowRight color="white" size={24} />}
+          />
+        </>
+      )}
     </View>
   );
 };
@@ -152,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BlankScreen;
+export default LoggedHome;

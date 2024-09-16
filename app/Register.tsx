@@ -10,6 +10,7 @@ import { db, auth } from './firebaseConfig'; // Adjust the path as necessary
 import { getFirestore, collection, addDoc, doc, setDoc } from 'firebase/firestore'; // Import Firestore
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; // Import Auth
 import LottieView from 'lottie-react-native'; // Add this line
+import { Alert } from 'react-native'; // Import Alert
 
 export default function Register() {
   const router = useRouter();
@@ -35,6 +36,44 @@ export default function Register() {
 
   const handleContinue = async () => {
     if (step === 1) {
+      // Nickname validation
+      const nicknameRegex = /^[a-zA-Z0-9]{4,16}$/;
+      if (!formData.nickname) {
+        Alert.alert('Input Error', 'Nickname is required.');
+        return;
+      }
+      if (!nicknameRegex.test(formData.nickname)) {
+        Alert.alert('Input Error', 'Nickname must be 4-16 characters long and contain only letters and numbers.');
+        return;
+      }
+
+      // Password validation
+      const passwordRegex = /^[a-zA-Z0-9]{7,}$/;
+      if (!passwordRegex.test(formData.password)) {
+        Alert.alert('Input Error', 'Password must be at least 7 characters long and contain only letters and numbers.');
+        return;
+      }
+
+      // Password match validation
+      if (formData.password !== formData.retypePassword) {
+        Alert.alert('Input Error', 'Passwords do not match.');
+        return;
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        Alert.alert('Input Error', 'Please enter a valid email address.');
+        return;
+      }
+
+      // Check if terms are accepted
+      if (!formData.acceptMembership || !formData.acceptPersonalData) {
+        Alert.alert('Input Error', 'You must accept the membership and personal data terms to continue.');
+        return;
+      }
+
+      // If all validations pass, move to step 2
       setStep(2);
     } else {
       setLoading(true); // Add this line to set loading state
